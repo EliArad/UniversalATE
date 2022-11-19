@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2647A9ED-85A8-4205-A9B0-8C0FF4F284A3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ATEControls</RootNamespace>
+    <AssemblyName>ATEControls</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ATETestBuildControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ATETestBuildControl.Designer.cs">
+      <DependentUpon>ATETestBuildControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ATETestControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ATETestControl.Designer.cs">
+      <DependentUpon>ATETestControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GuiCommon.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ATETestBuildControl.resx">
+      <DependentUpon>ATETestBuildControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ATETestControl.resx">
+      <DependentUpon>ATETestControl.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ATEDB\ATEDB.csproj">
+      <Project>{3F97BF4C-C344-4C8C-A043-CAAB5A7ACC65}</Project>
+      <Name>ATEDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GuiSkin\GSkinLib.csproj">
+      <Project>{285f83d5-3f00-4c36-adb6-cf4a39fdf76c}</Project>
+      <Name>GSkinLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InvokersLib\InvokersLib.csproj">
+      <Project>{E40F14D8-9643-4903-A79A-4A658FF0C732}</Project>
+      <Name>InvokersLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITest\ITest.csproj">
+      <Project>{4c7b5b6a-182f-49ce-9821-bc1dcf5786ed}</Project>
+      <Name>ITest</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
