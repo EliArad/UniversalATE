@@ -32,7 +32,6 @@ namespace GSkinLib
             m_resManager = new ResourceManager(fileName);
             if (m_resManager.Load() == false)
             {
-                m_resManager = null;
                 return false;
             }
             return true;
