@@ -48,6 +48,8 @@ namespace ATEControls
             this.txtTestClassName = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.chkExtendedForm = new GSkinLib.SkinOnOffBox();
+            this.cmbGroup = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtTestName
@@ -61,7 +63,7 @@ namespace ATEControls
             // txtDescription
             // 
             this.txtDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.txtDescription.Location = new System.Drawing.Point(415, 22);
+            this.txtDescription.Location = new System.Drawing.Point(597, 22);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(224, 37);
@@ -78,7 +80,7 @@ namespace ATEControls
             // 
             // btnSettings
             // 
-            this.btnSettings.Location = new System.Drawing.Point(1113, 23);
+            this.btnSettings.Location = new System.Drawing.Point(1295, 23);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(75, 23);
             this.btnSettings.TabIndex = 6;
@@ -88,7 +90,7 @@ namespace ATEControls
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(412, 7);
+            this.label2.Location = new System.Drawing.Point(594, 7);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(60, 13);
             this.label2.TabIndex = 7;
@@ -96,7 +98,7 @@ namespace ATEControls
             // 
             // txtDllFileName
             // 
-            this.txtDllFileName.Location = new System.Drawing.Point(646, 25);
+            this.txtDllFileName.Location = new System.Drawing.Point(828, 25);
             this.txtDllFileName.Name = "txtDllFileName";
             this.txtDllFileName.Size = new System.Drawing.Size(332, 20);
             this.txtDllFileName.TabIndex = 8;
@@ -104,7 +106,7 @@ namespace ATEControls
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(645, 9);
+            this.label3.Location = new System.Drawing.Point(827, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(101, 13);
             this.label3.TabIndex = 9;
@@ -112,7 +114,7 @@ namespace ATEControls
             // 
             // btnBrowse
             // 
-            this.btnBrowse.Location = new System.Drawing.Point(984, 23);
+            this.btnBrowse.Location = new System.Drawing.Point(1166, 23);
             this.btnBrowse.Name = "btnBrowse";
             this.btnBrowse.Size = new System.Drawing.Size(75, 23);
             this.btnBrowse.TabIndex = 10;
@@ -122,7 +124,7 @@ namespace ATEControls
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(1517, 23);
+            this.btnRemove.Location = new System.Drawing.Point(1699, 23);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(75, 23);
             this.btnRemove.TabIndex = 12;
@@ -132,7 +134,7 @@ namespace ATEControls
             // 
             // chkEnable
             // 
-            this.chkEnable.Location = new System.Drawing.Point(1226, 23);
+            this.chkEnable.Location = new System.Drawing.Point(1408, 23);
             this.chkEnable.Name = "chkEnable";
             this.chkEnable.Size = new System.Drawing.Size(55, 23);
             this.chkEnable.TabIndex = 13;
@@ -141,7 +143,7 @@ namespace ATEControls
             // 
             // chkVisible
             // 
-            this.chkVisible.Location = new System.Drawing.Point(1308, 23);
+            this.chkVisible.Location = new System.Drawing.Point(1490, 23);
             this.chkVisible.Name = "chkVisible";
             this.chkVisible.Size = new System.Drawing.Size(55, 23);
             this.chkVisible.TabIndex = 14;
@@ -151,7 +153,7 @@ namespace ATEControls
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1224, 4);
+            this.label4.Location = new System.Drawing.Point(1406, 4);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(40, 13);
             this.label4.TabIndex = 15;
@@ -160,7 +162,7 @@ namespace ATEControls
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(1305, 4);
+            this.label5.Location = new System.Drawing.Point(1487, 4);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(37, 13);
             this.label5.TabIndex = 16;
@@ -169,7 +171,7 @@ namespace ATEControls
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(214, 4);
+            this.label6.Location = new System.Drawing.Point(396, 4);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(61, 13);
             this.label6.TabIndex = 18;
@@ -178,7 +180,7 @@ namespace ATEControls
             // txtTestClassName
             // 
             this.txtTestClassName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.txtTestClassName.Location = new System.Drawing.Point(217, 22);
+            this.txtTestClassName.Location = new System.Drawing.Point(399, 22);
             this.txtTestClassName.Name = "txtTestClassName";
             this.txtTestClassName.Size = new System.Drawing.Size(180, 23);
             this.txtTestClassName.TabIndex = 17;
@@ -186,7 +188,7 @@ namespace ATEControls
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(1400, 3);
+            this.label7.Location = new System.Drawing.Point(1582, 3);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(75, 13);
             this.label7.TabIndex = 20;
@@ -194,12 +196,31 @@ namespace ATEControls
             // 
             // chkExtendedForm
             // 
-            this.chkExtendedForm.Location = new System.Drawing.Point(1403, 22);
+            this.chkExtendedForm.Location = new System.Drawing.Point(1585, 22);
             this.chkExtendedForm.Name = "chkExtendedForm";
             this.chkExtendedForm.Size = new System.Drawing.Size(55, 23);
             this.chkExtendedForm.TabIndex = 19;
             this.chkExtendedForm.UseVisualStyleBackColor = false;
             this.chkExtendedForm.Click += new System.EventHandler(this.chkExtendedForm_Click);
+            // 
+            // cmbGroup
+            // 
+            this.cmbGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbGroup.FormattingEnabled = true;
+            this.cmbGroup.Location = new System.Drawing.Point(217, 21);
+            this.cmbGroup.Name = "cmbGroup";
+            this.cmbGroup.Size = new System.Drawing.Size(171, 24);
+            this.cmbGroup.TabIndex = 21;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(214, 2);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(65, 13);
+            this.label8.TabIndex = 22;
+            this.label8.Text = "Group name";
             // 
             // ATETestBuildControl
             // 
@@ -207,6 +228,8 @@ namespace ATEControls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.cmbGroup);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.chkExtendedForm);
             this.Controls.Add(this.label6);
@@ -225,7 +248,7 @@ namespace ATEControls
             this.Controls.Add(this.txtDescription);
             this.Controls.Add(this.txtTestName);
             this.Name = "ATETestBuildControl";
-            this.Size = new System.Drawing.Size(1695, 69);
+            this.Size = new System.Drawing.Size(1870, 73);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -249,5 +272,7 @@ namespace ATEControls
         private System.Windows.Forms.TextBox txtTestClassName;
         private System.Windows.Forms.Label label7;
         private SkinOnOffBox chkExtendedForm;
+        private System.Windows.Forms.ComboBox cmbGroup;
+        private System.Windows.Forms.Label label8;
     }
 }

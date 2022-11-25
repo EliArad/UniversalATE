@@ -79,7 +79,21 @@ namespace ATEControls
             }
         }
         ATETest m_test;
-        public void Setup(ATETest test, int testId)
+        public void Setup(List<string> groups)
+        {
+            cmbGroup.Items.Add("Root");
+            if (groups != null)
+            {
+                foreach (string s in groups)
+                {
+                    cmbGroup.Items.Add(s);
+                }                
+            }
+            cmbGroup.SelectedIndex = 0;
+
+        }
+         
+        public void Setup(List<string> groups, ATETest test, int testId)
         {
             m_test = test;
             m_testId = testId;
@@ -98,6 +112,25 @@ namespace ATEControls
             chkEnable.Checked(test.testEnabled);
             chkVisible.Checked(test.testVisible);
             chkExtendedForm.Checked(test.extendedForm);
+
+            cmbGroup.Items.Add("Root");
+            if (groups != null)
+            {
+                foreach (string s in groups)
+                {
+                    cmbGroup.Items.Add(s);
+                }
+            }
+            cmbGroup.SelectedIndex = 0;
+
+            try
+            {
+                cmbGroup.Text = test.GroupName;
+            }
+            catch (Exception err)
+            {
+                cmbGroup.SelectedIndex = 0;
+            }
 
         }
         public bool GetData(out ATETest test, out string outMessage)
@@ -134,6 +167,7 @@ namespace ATEControls
             test.testDllFileName = txtDllFileName.Text;
             test.testDescription = txtDescription.Text;
             test.testName = txtTestName.Text;
+            test.GroupName = cmbGroup.Text;
 
             return ok;
         }

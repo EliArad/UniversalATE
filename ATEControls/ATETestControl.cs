@@ -182,6 +182,8 @@ namespace ATEControls
             test.testDllFileIsRelative = m_test.testDllFileIsRelative;
             test.testVisible = m_test.testVisible;
             test.extendedForm = m_test.extendedForm;
+            test.GroupName = m_test.GroupName;
+
             if (string.IsNullOrEmpty(test.testClassName) == true)
             {
                 outMessage = "Class name is empty";

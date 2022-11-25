@@ -35,7 +35,9 @@ namespace UniversalATE
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buildViewGroupingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addTestGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.allEnabled2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,7 +53,8 @@ namespace UniversalATE
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnStartAll = new GSkinLib.SkinCheckBox();
+            this.btnStartAll = new GSkinLib.SkinButton();
+            this.btnSelectGroup = new GSkinLib.SkinButton();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,7 +98,9 @@ namespace UniversalATE
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.buildViewToolStripMenuItem,
+            this.buildViewGroupingToolStripMenuItem,
             this.addNewTestToolStripMenuItem,
+            this.addTestGroupToolStripMenuItem,
             this.clearAllToolStripMenuItem,
             this.toolStripMenuItem1,
             this.allEnabled2ToolStripMenuItem,
@@ -111,12 +116,26 @@ namespace UniversalATE
             this.buildViewToolStripMenuItem.Text = "Build View";
             this.buildViewToolStripMenuItem.Click += new System.EventHandler(this.buildViewToolStripMenuItem_Click);
             // 
+            // buildViewGroupingToolStripMenuItem
+            // 
+            this.buildViewGroupingToolStripMenuItem.Name = "buildViewGroupingToolStripMenuItem";
+            this.buildViewGroupingToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.buildViewGroupingToolStripMenuItem.Text = "Test View - Grouping";
+            this.buildViewGroupingToolStripMenuItem.Click += new System.EventHandler(this.testViewGroupingToolStripMenuItem_Click);
+            // 
             // addNewTestToolStripMenuItem
             // 
             this.addNewTestToolStripMenuItem.Name = "addNewTestToolStripMenuItem";
             this.addNewTestToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.addNewTestToolStripMenuItem.Text = "Add New Test - Ctrl + A";
             this.addNewTestToolStripMenuItem.Click += new System.EventHandler(this.addNewTestToolStripMenuItem_Click);
+            // 
+            // addTestGroupToolStripMenuItem
+            // 
+            this.addTestGroupToolStripMenuItem.Name = "addTestGroupToolStripMenuItem";
+            this.addTestGroupToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.addTestGroupToolStripMenuItem.Text = "Add Test Group";
+            this.addTestGroupToolStripMenuItem.Click += new System.EventHandler(this.addTestGroupToolStripMenuItem_Click);
             // 
             // clearAllToolStripMenuItem
             // 
@@ -215,6 +234,7 @@ namespace UniversalATE
             this.flowLayoutPanel1.AutoScroll = true;
             this.flowLayoutPanel1.BackColor = System.Drawing.Color.White;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 68);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(1367, 542);
             this.flowLayoutPanel1.TabIndex = 1;
@@ -249,11 +269,23 @@ namespace UniversalATE
             this.btnStartAll.UseVisualStyleBackColor = true;
             this.btnStartAll.Click += new System.EventHandler(this.btnStartAll_Click);
             // 
+            // btnSelectGroup
+            // 
+            this.btnSelectGroup.Location = new System.Drawing.Point(594, 38);
+            this.btnSelectGroup.Name = "btnSelectGroup";
+            this.btnSelectGroup.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectGroup.TabIndex = 5;
+            this.btnSelectGroup.Text = "Groups..";
+            this.btnSelectGroup.UseVisualStyleBackColor = false;
+            this.btnSelectGroup.Visible = false;
+            this.btnSelectGroup.Click += new System.EventHandler(this.btnSelectGroup_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1367, 612);
+            this.Controls.Add(this.btnSelectGroup);
             this.Controls.Add(this.btnStartAll);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtSearch);
@@ -287,7 +319,7 @@ namespace UniversalATE
         private System.Windows.Forms.ToolStripMenuItem clearAllToolStripMenuItem;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Label label1;
-        private GSkinLib.SkinCheckBox btnStartAll;
+        private GSkinLib.SkinButton btnStartAll;
         private System.Windows.Forms.ToolStripMenuItem showExtendedFormToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem allEnabled2ToolStripMenuItem;
@@ -296,6 +328,9 @@ namespace UniversalATE
         private System.Windows.Forms.ToolStripMenuItem allDisableToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allVisibleToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem allUnVisibleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addTestGroupToolStripMenuItem;
+        private GSkinLib.SkinButton btnSelectGroup;
+        private System.Windows.Forms.ToolStripMenuItem buildViewGroupingToolStripMenuItem;
     }
 }
 

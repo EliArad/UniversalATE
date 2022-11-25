@@ -8,6 +8,7 @@ namespace ATEDBLib
 {
     public struct ATETest
     {
+        public string GroupName;
         public string testName;
         public string testClassName;
         public string testDescription;
@@ -20,6 +21,7 @@ namespace ATEDBLib
     public struct ATEDB
     {
         public string AteVersion;
+        public List<string> Groups;
         public SortedDictionary<int, ATETest> m_allTests;
     }
 }

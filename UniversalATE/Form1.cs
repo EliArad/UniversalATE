@@ -17,12 +17,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ATEControls.ATETestBuildControl;
 using static ATEControls.ATETestControl;
+using static ATEControls.TestGroupControl;
 
 namespace UniversalATE
 {
-    public partial class Form1 : Form, IATETestBuildControl, IATETestControl
+    public partial class Form1 : Form, IATETestBuildControl, IATETestControl, ITestGroupControl
     {
-        bool BuildView = false;
+
         ATEDB m_ateDB;
         string m_ateFileName = "UniversalATETestXXX.json";
         ATETestControl m_currentRunningTestControl = null;
@@ -30,6 +31,13 @@ namespace UniversalATE
         public static string BaseFolder;
 
         GenericSettings<ATEDB> m_gAteDB;
+        enum VIEW
+        {
+            BUILD_VIEW,
+            TEST_VIEW,
+            GROUP_TEST_VIEW
+        }
+        VIEW m_view = VIEW.TEST_VIEW;
 
         public Form1()
         {
@@ -60,7 +68,7 @@ namespace UniversalATE
                 LoadSkins();
             }
 
-            LoadControls(m_ateDB.m_allTests);
+            LoadControls(m_ateDB.m_allTests, null);
 
             ShowViewState();
             
@@ -70,8 +78,8 @@ namespace UniversalATE
             btnStartAll.Left -= 13;
             showExtendedFormToolStripMenuItem.Visible = false;
             clearAllToolStripMenuItem.Visible = false;
-
-            if (BuildView == false)
+            
+            if (m_view == VIEW.TEST_VIEW)
             {
                 bool b = false;
                 foreach (ATETestControl c in flowLayoutPanel1.Controls)
@@ -83,18 +91,20 @@ namespace UniversalATE
         }
         void LoadSkins()
         {
-          
+            btnSelectGroup.SetSkin(ResManager.R.GetBitmaps("btn140x40_4"), 0.8f, 0.8f);
+            btnSelectGroup.ForeColor = Color.White;
+            btnSelectGroup.Top -= 14;
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.S && e.Modifiers == Keys.Control)
             {
-                if (BuildView == true)
+                if (m_view == VIEW.BUILD_VIEW)
                 {
                     SaveTestBuilder();
                 }
-                else
+                else if (m_view == VIEW.TEST_VIEW)
                 {
                     SaveTests();
                 }
@@ -103,16 +113,24 @@ namespace UniversalATE
 
             if (e.KeyCode == Keys.A && e.Modifiers == Keys.Control)
             {
-                if (BuildView == true)
+                if (m_view == VIEW.BUILD_VIEW)
                 {
                     AddTestBuildControl();
+
+                    int id = 0;
+                    foreach (ATETestBuildControl c in flowLayoutPanel1.Controls)
+                    {
+                        c.Id = id;
+                        id++;
+                        c.Setup(m_ateDB.Groups);
+                    }
                 }                 
             }            
         }
 
         bool ShowViewState()
         {
-            if (BuildView == true)
+            if (m_view == VIEW.BUILD_VIEW)
             {
                 if (Debugger.IsAttached == false)
                 {
@@ -123,7 +141,7 @@ namespace UniversalATE
                         return false;
                 }
 
-                buildViewToolStripMenuItem.Text = "Test View";
+                
                 this.Text = m_title + " - " + "Build View";
                 addNewTestToolStripMenuItem.Visible = true;
                 testsToolStripMenuItem.Visible = false;
@@ -131,9 +149,9 @@ namespace UniversalATE
                 allVisble2ToolStripMenuItem.Visible = true;
                 clearAllToolStripMenuItem.Visible = true;
             }
-            else
+            else if (m_view == VIEW.TEST_VIEW)
             {
-                buildViewToolStripMenuItem.Text = "Build View";
+             
                 this.Text = m_title + " - " + "Test View";
                 addNewTestToolStripMenuItem.Visible = false;
                 testsToolStripMenuItem.Visible = true;
@@ -143,25 +161,30 @@ namespace UniversalATE
             }
             return true;
         }
-        void LoadControls(SortedDictionary<int, ATETest> tests, string search = "")
+        void LoadControls(SortedDictionary<int, ATETest> tests, List<string> groups, string search = "")
         {
             flowLayoutPanel1.Controls.Clear();
             int width = 0;
             if (m_ateDB.m_allTests != null)
             {
                 int i = 0;
-                if (BuildView == true)
+                if (m_view == VIEW.BUILD_VIEW)
                 {
                     foreach (KeyValuePair<int, ATETest> test in tests)
                     {
                         if ((search != string.Empty) && test.Value.testName.ToLower().Contains(search.ToLower()) == false)
                             continue;
+                        if (groups != null)
+                        {
+                            if (groups.Contains(test.Value.GroupName) == false)
+                                continue;
+                        }
                         ATETestBuildControl control = AddTestBuildControl();
-                        control.Setup(test.Value,i++);
+                        control.Setup(m_ateDB.Groups, test.Value,i++);
                         width = control.Width + 15;
                     }
                 }
-                else
+                else if (m_view == VIEW.TEST_VIEW)
                 {
                     foreach (KeyValuePair<int, ATETest> test in m_ateDB.m_allTests)
                     {
@@ -173,6 +196,11 @@ namespace UniversalATE
                         if (test.Value.testVisible == false)
                         {
                             continue;
+                        }
+                        if (groups != null)
+                        {
+                            if (groups.Contains(test.Value.GroupName) == false)
+                                continue;
                         }
                         ATETestControl control = AddTestontrol();
                         width = control.Width;
@@ -238,36 +266,52 @@ namespace UniversalATE
 
         private void buildViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BuildView = !BuildView;
+            flowLayoutPanel1.Visible = true;
+            
+            m_view = VIEW.BUILD_VIEW;
+            btnSelectGroup.Visible = false;
             if (ShowViewState() == false)
             {
-                BuildView = false;
+                m_view = VIEW.TEST_VIEW;
                 return;
             }
 
-            LoadControls(m_ateDB.m_allTests);
+            LoadControls(m_ateDB.m_allTests, null);
             AppSettings.Instance.Save();
 
-            if (BuildView == false)
-                {
-                    bool b = false;
-                    foreach (ATETestControl c in flowLayoutPanel1.Controls)
-                    {
-                        b = b | c.IsTestEnable();
-                    }
-                    btnStartAll.Enable(b);
-                }
+           
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (BuildView == true)
+            string outMessage = string.Empty;
+            if (m_view == VIEW.BUILD_VIEW)
             {
                 SaveTestBuilder();
             }
-            else
+            else if (m_view == VIEW.TEST_VIEW)
             {
                 SaveTests();
+            }
+            else if(m_view == VIEW.GROUP_TEST_VIEW)
+            {
+                m_ateDB.m_allTests.Clear();
+                foreach (ATETestGroupControl c in flowLayoutPanel1.Controls)
+                {
+                    List<ATETestControl> ateControls = c.GetAteControls();
+                    SaveTests(ateControls);
+                }
+                if (m_gAteDB.Save(m_ateDB, out outMessage) == false)
+                {
+                    MessageBox.Show("Failed to save " + outMessage);
+                }
+                else
+                {
+                    this.Text = m_title + " - Saved";
+                    await Task.Delay(500);
+                    ShowViewState();
+                }
+
             }
         }
         async void SaveTests()
@@ -295,10 +339,7 @@ namespace UniversalATE
                 m_ateDB.m_allTests.Add(i++, test);
             }
 
-            if (string.IsNullOrEmpty(m_ateDB.m_allTests[0].testClassName) == true)
-            {
-                Console.WriteLine("e");
-            }
+            
             if (m_gAteDB.Save(m_ateDB, out outMessage) == false)
             {
                 MessageBox.Show("Failed to save " + outMessage);
@@ -310,6 +351,34 @@ namespace UniversalATE
                 ShowViewState();
 
             }
+        }
+
+        async void SaveTests(List<ATETestControl> ateControls)
+        {
+           
+            string outMessage;
+            foreach (ATETestControl c in ateControls)
+            {
+                if (c.GetData(out ATETest test, out outMessage) == false)
+                {
+                    Color bc = c.BackColor;
+                    c.BackColor = Color.Red;
+                    MessageBox.Show("Failed to get data from test: " + (c.Id + 1) + Environment.NewLine + outMessage);
+                    c.BackColor = bc;
+                    return;
+                }
+            }
+            int i = 0;
+            foreach (ATETestControl c in ateControls)
+            {
+                if (c.GetData(out ATETest test, out outMessage) == false)
+                {
+                    return;
+                }
+                m_ateDB.m_allTests.Add(i++, test);
+            }
+
+                      
         }
         async void SaveTestBuilder()
         {
@@ -377,7 +446,7 @@ namespace UniversalATE
 
         private void addNewTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (BuildView == true)
+            if (m_view == VIEW.BUILD_VIEW)
             {
                 ATETestBuildControl control = AddTestBuildControl();
 
@@ -386,6 +455,7 @@ namespace UniversalATE
                 {
                     c.Id = id;
                     id++;
+                    c.Setup(m_ateDB.Groups);
                 }
             }
             
@@ -421,7 +491,7 @@ namespace UniversalATE
 
         private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (BuildView == true)
+            if (m_view == VIEW.BUILD_VIEW)
             {
                 DialogResult d = MessageBox.Show("Are you sure you want to clear all tests?", "Universal ATE", MessageBoxButtons.YesNo);
                 if (d == DialogResult.No)
@@ -436,7 +506,7 @@ namespace UniversalATE
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (BuildView == false)
+            if (m_view == VIEW.TEST_VIEW)
             {
                 foreach (ATETestControl t in flowLayoutPanel1.Controls)
                 {
@@ -453,7 +523,7 @@ namespace UniversalATE
 
             if (txtSearch.Text == string.Empty)
             {
-                LoadControls(m_ateDB.m_allTests);
+                LoadControls(m_ateDB.m_allTests, null);
             }            
         }
 
@@ -466,13 +536,13 @@ namespace UniversalATE
                 {
                     foreach (KeyValuePair<int, ATETest> t in m_ateDB.m_allTests)
                     {
-                        LoadControls(m_ateDB.m_allTests, txtSearch.Text);
+                        LoadControls(m_ateDB.m_allTests, null , txtSearch.Text);
                     }
 
                 }
                 else
                 {
-                    LoadControls(m_ateDB.m_allTests);
+                    LoadControls(m_ateDB.m_allTests, null);
                 }
 
                 e.Handled = true;
@@ -545,7 +615,7 @@ namespace UniversalATE
         async void StartAllTests()
         {
             
-            if (BuildView == false)
+            if (m_view == VIEW.TEST_VIEW)
             {
                 if (m_allRunningTests == false)
                 {
@@ -576,7 +646,57 @@ namespace UniversalATE
                 }
                 else
                 {
-                    StopAllTests();
+                    ClearBeforeAllStart(true);
+                    btnStartAll.Text = "Stop All";
+                    await Task.Run(() =>
+                    {
+                        m_allRunningTests = true;
+                        StopAllTests();
+                    });
+                    EnableTestButtons(true);
+                    EnableSettingsButton(true);
+                    m_allRunningTests = false;
+                    INVOKERS.InvokeControlText(btnStartAll, "Start Tests");
+                }
+            }
+            else
+            {
+                if (m_allRunningTests == false)
+                {                    
+                    foreach (ATETestGroupControl c in flowLayoutPanel1.Controls)
+                    {
+                        c.ClearBeforeAllStart();
+                    }
+                    btnStartAll.Text = "Stop All";
+                    await Task.Run(() =>
+                    {
+                        foreach (ATETestGroupControl c in flowLayoutPanel1.Controls)
+                        {
+                            c.StartTests();
+                        }
+                    });
+                    foreach (ATETestGroupControl c in flowLayoutPanel1.Controls)
+                    {
+                        c.EnableTestButtons(true);
+                        c.EnableSettingsButton(true);
+                    }
+                   
+                    m_allRunningTests = false;
+                    INVOKERS.InvokeControlText(btnStartAll, "Start Tests");
+                }
+                else
+                {
+                    await Task.Run(() =>
+                    {
+                        foreach (ATETestGroupControl c in flowLayoutPanel1.Controls)
+                        {
+                            c.StopTests();
+                        }
+                    });
+                    EnableTestButtons(true);
+                    EnableSettingsButton(true);
+                    m_allRunningTests = false;
+                    INVOKERS.InvokeControlText(btnStartAll, "Start Tests");
                 }
             }
         }
@@ -619,14 +739,14 @@ namespace UniversalATE
 
         private void AllEnableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (BuildView)
+            if (m_view == VIEW.BUILD_VIEW)
             {
                 foreach (ATETestBuildControl c in flowLayoutPanel1.Controls)
                 {
                     c.EnabledChecked(true);
                 }
             }
-            else
+            else if (m_view == VIEW.TEST_VIEW)
             {
                 foreach (ATETestControl c in flowLayoutPanel1.Controls)
                 {
@@ -638,7 +758,7 @@ namespace UniversalATE
 
         private void allDisableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (BuildView)
+            if (m_view == VIEW.BUILD_VIEW)
             {
                 foreach (ATETestBuildControl c in flowLayoutPanel1.Controls)
                 {
@@ -649,7 +769,7 @@ namespace UniversalATE
 
         private void allVisibleToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (BuildView)
+            if (m_view == VIEW.BUILD_VIEW)
             {
                 foreach (ATETestBuildControl c in flowLayoutPanel1.Controls)
                 {
@@ -660,7 +780,7 @@ namespace UniversalATE
 
         private void allUnVisibleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (BuildView)
+            if (m_view == VIEW.BUILD_VIEW)
             {
                 foreach (ATETestBuildControl c in flowLayoutPanel1.Controls)
                 {
@@ -671,7 +791,7 @@ namespace UniversalATE
 
         public void NotifyEnableTest(ATETest test, int testId, ATETestControl control, bool enable)
         {
-            if (BuildView == false)
+            if (m_view == VIEW.TEST_VIEW)
             {
                 bool b = false;
                 foreach (ATETestControl c in flowLayoutPanel1.Controls)
@@ -680,6 +800,113 @@ namespace UniversalATE
                 }
                 btnStartAll.Enable(b);                               
             }
+            else if (m_view == VIEW.GROUP_TEST_VIEW)
+            {
+                bool b = false;
+                foreach (ATETestGroupControl c in flowLayoutPanel1.Controls)
+                {
+                    b = b | c.DoWeHaveEnabledTestThere();
+                }
+                btnStartAll.Enable(b);
+            }
+        }
+
+        private void addTestGroupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GroupNameForm f = new GroupNameForm(this, m_ateDB.Groups);
+            f.ShowDialog();
+        }
+
+        public void NotifyGroupList(List<string> list)
+        {
+            m_ateDB.Groups = list;
+            m_gAteDB.Save(m_ateDB, out string outMessage);
+
+        }
+
+        List<string> m_currentShowList = new List<string>();
+        private void btnSelectGroup_Click(object sender, EventArgs e)
+        {
+            SelectGroupForm s = new SelectGroupForm(m_ateDB.Groups, m_currentShowList);
+            if (s.ShowDialog() == DialogResult.OK)
+            {
+                m_currentShowList = s.GetList();
+                LoadControls(m_ateDB.m_allTests, m_currentShowList, txtSearch.Text);  
+            }
+        }
+
+        private void testViewGroupingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            flowLayoutPanel1.Controls.Clear();
+            btnStartAll.Visible = true;
+            if (m_view == VIEW.BUILD_VIEW)
+            {
+                m_view = VIEW.TEST_VIEW;                
+            }
+
+            if (m_view == VIEW.TEST_VIEW)
+            {
+                btnSelectGroup.Visible = false;
+                m_view = VIEW.GROUP_TEST_VIEW;
+            }
+            else
+            {
+                m_view = VIEW.TEST_VIEW;
+                btnSelectGroup.Visible = true;
+            }
+            if (m_view == VIEW.GROUP_TEST_VIEW)
+            {
+                buildViewGroupingToolStripMenuItem.Text = "Test View";
+
+                foreach (var t in m_ateDB.m_allTests)
+                {
+                    if (t.Value.GroupName == "Root")
+                    {
+                        ATETestGroupControl control = new ATETestGroupControl();
+                        control.Setup(t.Value.GroupName, this, m_ateFileName);
+                        flowLayoutPanel1.Controls.Add(control);
+                        control.Width = this.Width - 15;
+                    }
+                }
+
+                if (m_ateDB.Groups != null)
+                {
+                    foreach (string group in m_ateDB.Groups)
+                    {
+                        int count = 0;
+                        foreach (var t in m_ateDB.m_allTests)
+                        {
+                            if (t.Value.GroupName == group)
+                            {
+                                count++;
+                            }
+                        }
+                        if (count == 0)
+                            continue;
+
+                        ATETestGroupControl control = new ATETestGroupControl();
+                        control.Setup(group, this, m_ateFileName);
+                        flowLayoutPanel1.Controls.Add(control);
+                        control.Width = this.Width - 15;
+                    }
+                }
+            }
+            if (m_view == VIEW.TEST_VIEW)
+            {
+                LoadControls(m_ateDB.m_allTests, null);
+                buildViewGroupingToolStripMenuItem.Text = "Test View - Grouping";
+            }
+
+            if (m_view == VIEW.TEST_VIEW)
+            {
+                bool b = false;
+                foreach (ATETestControl c in flowLayoutPanel1.Controls)
+                {
+                    b = b | c.IsTestEnable();
+                }
+                btnStartAll.Enable(b);
+            }
         }
     }
 }
+ 

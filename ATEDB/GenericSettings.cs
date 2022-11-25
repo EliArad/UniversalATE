@@ -13,8 +13,7 @@ namespace ATECommon
     
     public class GenericSettings<T> where T: new()
     {
-        T t;
-     
+          
         private static readonly object padlock = new object();
         string m_fileName;
 
